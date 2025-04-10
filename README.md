@@ -1,112 +1,84 @@
-# Shader Blur
+# 🌟 Shader Blur in Flutter
 
-A Flutter application demonstrating high-performance blur effects using fragment shaders, with a comparison to Flutter's built-in ImageFilter blur.
+A sleek Flutter demo showcasing ultra-smooth, high-performance blur effects using custom fragment shaders—going beyond Flutter's built-in capabilities.
 
-![Shader Blur Demo](https://github.com/codenameakshay/shader-blur/raw/main/screenshots/comparison_view.png)
+![Shader Blur Hero](https://github.com/user-attachments/assets/8f9d8060-6e4d-457b-9bd4-084d7d7010d5)
 
-## Overview
+## 🚀 Overview
 
-This project showcases the implementation of a high-quality, Apple-style blur effect in Flutter using fragment shaders. It provides a side-by-side comparison with Flutter's built-in ImageFilter blur to demonstrate the differences in visual quality and performance.
+Elevate your UI with beautiful, GPU-powered blur effects. This app demonstrates a custom fragment shader blur compared directly with Flutter's standard `ImageFilter.blur`, highlighting significant improvements in visual quality and performance.
 
-### Key Features
+## ✨ Key Features
 
-- **Shader-based Blur**: Custom fragment shader implementation for high-quality blur effects
-- **Comparison View**: Side-by-side comparison of shader blur vs. ImageFilter blur
-- **Adjustable Blur Radius**: Control the intensity of the blur effect
-- **Cross-platform Support**: Works on iOS, Android, and web platforms
-- **Performance Optimized**: Efficient blur implementation for smooth animations
+- 🎨 **Shader-Based Blur:** Advanced GPU shader implementation for stunning blur effects.
+- ⚖️ **Side-by-Side Comparison:** Instantly compare shader blur vs. built-in blur.
+- 🔧 **Adjustable Blur Radius:** Dynamically fine-tune blur intensity.
+- 🌎 **Cross-Platform:** Seamlessly works across iOS, Android, and Web.
+- ⚡ **Performance Optimized:** Achieve silky-smooth animations and transitions.
 
-## Screenshots
+## 📸 Demo
 
-### Comparison View
-![Comparison View](https://github.com/codenameakshay/shader-blur/raw/main/screenshots/comparison_view.png)
+![Shader Blur Demo GIF](https://github.com/user-attachments/assets/eaab522b-ada2-4bd9-9578-f5a54aa3d99c)
 
-### Single View with Blur
-![Single View with Blur](https://github.com/codenameakshay/shader-blur/raw/main/screenshots/single_view_blur.png)
+## 🛠️ Implementation Details
 
-### Single View without Blur
-![Single View without Blur](https://github.com/codenameakshay/shader-blur/raw/main/screenshots/single_view_no_blur.png)
+The project compares two blur implementations:
 
-## Implementation Details
+### 1. **ShaderBlur (Recommended)**
+- **Location:** `lib/widgets/shader_blur.dart`
+- **Shaders:** `shaders/blur.frag`, `shaders/blur_android.frag`
+- **Highlights:** GPU-powered Gaussian blur with subtle frosted-glass enhancements.
 
-The project implements two different blur approaches:
+### 2. **ImageFilterBlur (Built-in)**
+- **Location:** `lib/widgets/image_filter_blur.dart`
+- **Description:** Basic Flutter blur implementation for baseline comparison.
 
-1. **ShaderBlur**: Uses a custom GLSL fragment shader for high-quality, Apple-style blur effects
-   - Located in `lib/widgets/shader_blur.dart`
-   - Shader code in `shaders/blur.frag` and `shaders/blur_android.frag`
-   - Features Gaussian blur with subtle enhancements for a frosted glass effect
+## 🚦 Getting Started
 
-2. **ImageFilterBlur**: Uses Flutter's built-in ImageFilter for comparison
-   - Located in `lib/widgets/image_filter_blur.dart`
-   - Simple implementation using Flutter's ImageFilter.blur
-
-## Getting Started
-
-### Prerequisites
-
-- Flutter SDK (latest stable version recommended)
+### 📋 Prerequisites
+- Flutter SDK (latest stable)
 - Dart SDK
-- An IDE (VS Code, Android Studio, etc.)
+- Preferred IDE (VS Code, Android Studio, etc.)
 
-### Installation
+### 🛠️ Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/codenameakshay/shader-blur.git
-   ```
+```bash
+git clone https://github.com/codenameakshay/shader-blur.git
+cd shader-blur
+flutter pub get
+flutter run
+```
 
-2. Navigate to the project directory:
-   ```bash
-   cd shader-blur
-   ```
+## 🎮 Using the Demo
 
-3. Get dependencies:
-   ```bash
-   flutter pub get
-   ```
+- **Adjust Blur:** Use the slider to dynamically change blur radius.
+- **Comparison Mode:** Toggle between shader and built-in blur using the app bar button.
+- **Dynamic Content:** Increment a counter to see blur effects on changing UI.
 
-4. Run the app:
-   ```bash
-   flutter run
-   ```
+## 🔬 How Shader Blur Works
 
-## Usage
+Our custom blur employs a GPU-powered fragment shader:
+- Applies a Gaussian distribution to sample neighboring pixels.
+- Enhances visuals by subtly increasing saturation and adding noise.
+- Optimizes performance with direct GPU execution.
 
-The app provides a simple interface to experiment with blur effects:
+## 📈 Performance Advantage
 
-- Use the slider to adjust the blur radius
-- Toggle between comparison view and single view using the compare button in the app bar
-- In single view mode, use the switch to toggle blur on/off
-- The floating action button increments a counter to demonstrate how the blur affects dynamic content
+Shader-based blur outperforms Flutter’s built-in blur by:
+- Leveraging GPU parallel processing.
+- Providing smoother, visually richer blur effects.
+- Reducing UI lag in animation-heavy scenarios.
 
-## How It Works
+## 🤝 Contributing
 
-### Shader-based Blur
+Feel inspired? Contributions are warmly welcomed! Simply fork and submit your PR.
 
-The shader-based blur uses a two-pass Gaussian blur algorithm implemented in GLSL. The fragment shader:
+## 📜 License
 
-1. Samples pixels in a radius around the current pixel
-2. Applies a Gaussian weight to each sample based on distance
-3. Adds subtle enhancements like increased saturation and noise to reduce banding
-4. Applies a slight transparency for a frosted glass effect
+MIT License — see [LICENSE](LICENSE) for details.
 
-### Performance Considerations
+## 🙌 Acknowledgments
 
-The shader-based blur is generally more performant than ImageFilter blur for several reasons:
+- Flutter team for an incredible framework.
+- Flutter Shaders package for seamless shader integration.
 
-- It runs directly on the GPU
-- It uses optimized sampling techniques
-- It can be fine-tuned for specific visual effects
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Flutter team for the amazing framework
-- The Flutter Shaders package for making shader integration easier
