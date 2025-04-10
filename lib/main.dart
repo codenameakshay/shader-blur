@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'widgets/shader_blur.dart';
+import 'widgets/image_filter_blur.dart';
 
 void main() {
   runApp(const MyApp());
@@ -59,14 +60,10 @@ class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   double _blurRadius = 5.0;
   bool _useBlur = true;
+  bool _showComparison = false;
 
   void _incrementCounter() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
       _counter++;
     });
   }
@@ -74,68 +71,172 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     // Create the content widget that will be blurred
-    Widget content = Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'You have pushed the button this many times:',
-          ),
-          Text(
-            '$_counter',
-            style: Theme.of(context).textTheme.headlineMedium,
-          ),
-          const SizedBox(height: 40),
-          // Add some colorful elements to better demonstrate the blur
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                color: Colors.red,
-              ),
-              Container(
-                width: 60,
-                height: 60,
-                color: Colors.green,
-              ),
-              Container(
-                width: 60,
-                height: 60,
-                color: Colors.blue,
-              ),
-            ],
-          ),
-          const SizedBox(height: 40),
-          // Slider to control blur radius
-          if (_useBlur)
-            Column(
+    Widget buildContent() {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            const SizedBox(height: 20),
+            // Add some colorful elements to better demonstrate the blur
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Blur Radius: ${_blurRadius.toStringAsFixed(1)}'),
-                Slider(
-                  value: _blurRadius,
-                  min: 1.0,
-                  max: 20.0,
-                  divisions: 19,
-                  label: _blurRadius.round().toString(),
-                  onChanged: (double value) {
-                    setState(() {
-                      _blurRadius = value;
-                    });
-                  },
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: Colors.red,
+                ),
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: Colors.green,
+                ),
+                Container(
+                  width: 40,
+                  height: 40,
+                  color: Colors.blue,
                 ),
               ],
             ),
-        ],
-      ),
-    );
+            const SizedBox(height: 10),
+            Image.network(
+              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg',
+              width: 120,
+              height: 120,
+            ),
+            const SizedBox(height: 10),
+            const CircularProgressIndicator(
+              color: Colors.red,
+            ),
+          ],
+        ),
+      );
+    }
 
-    // Apply blur if enabled
-    if (_useBlur) {
-      content = ShaderBlur(
-        blurRadius: _blurRadius,
-        child: content,
+    Widget mainContent;
+
+    if (_showComparison) {
+      // Comparison view
+      mainContent = Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Blur Radius: ${_blurRadius.toStringAsFixed(1)}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          Slider(
+            value: _blurRadius,
+            min: 1.0,
+            max: 10.0,
+            divisions: 19,
+            label: _blurRadius.round().toString(),
+            onChanged: (double value) {
+              setState(() {
+                _blurRadius = value;
+              });
+            },
+          ),
+          Expanded(
+            child: Row(
+              children: [
+                // Left side: Shader Blur
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Shader Blur',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        child: Card(
+                          margin: const EdgeInsets.all(8.0),
+                          child: ShaderBlur(
+                            blurRadius: _blurRadius,
+                            child: buildContent(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // Right side: ImageFilter Blur
+                Expanded(
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'ImageFilter Blur',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Expanded(
+                        child: Card(
+                          margin: const EdgeInsets.all(8.0),
+                          child: ImageFilterBlur(
+                            blurRadius: _blurRadius,
+                            child: buildContent(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      // Single view
+      Widget content = buildContent();
+
+      // Apply blur if enabled
+      if (_useBlur) {
+        content = ShaderBlur(
+          blurRadius: _blurRadius,
+          child: content,
+        );
+      }
+
+      mainContent = Column(
+        children: [
+          if (_useBlur)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text('Blur Radius: ${_blurRadius.toStringAsFixed(1)}'),
+                  Slider(
+                    value: _blurRadius,
+                    min: 1.0,
+                    max: 10.0,
+                    divisions: 19,
+                    label: _blurRadius.round().toString(),
+                    onChanged: (double value) {
+                      setState(() {
+                        _blurRadius = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          Expanded(child: content),
+        ],
       );
     }
 
@@ -144,18 +245,33 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
-          // Toggle for blur effect
-          Switch(
-            value: _useBlur,
-            onChanged: (value) {
+          // Toggle for comparison view
+          IconButton(
+            icon: Icon(_showComparison ? Icons.compare : Icons.compare_arrows),
+            tooltip: 'Toggle Comparison View',
+            onPressed: () {
               setState(() {
-                _useBlur = value;
+                _showComparison = !_showComparison;
+                // Always enable blur in comparison mode
+                if (_showComparison) {
+                  _useBlur = true;
+                }
               });
             },
           ),
+          // Toggle for blur effect (only in single view)
+          if (!_showComparison)
+            Switch(
+              value: _useBlur,
+              onChanged: (value) {
+                setState(() {
+                  _useBlur = value;
+                });
+              },
+            ),
         ],
       ),
-      body: content,
+      body: mainContent,
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
