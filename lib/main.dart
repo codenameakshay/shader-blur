@@ -2,66 +2,71 @@ import 'package:flutter/material.dart';
 import 'widgets/shader_blur.dart';
 import 'widgets/image_filter_blur.dart';
 
+/// ShaderBlur Demo Application
+/// 
+/// This application demonstrates the use of fragment shaders for creating
+/// high-quality blur effects in Flutter, comparing them with Flutter's built-in
+/// ImageFilter blur. The app showcases performance differences and visual quality
+/// between the two approaches.
 void main() {
   runApp(const MyApp());
 }
 
+/// The main application widget.
+/// 
+/// This is the root widget of the application that sets up the MaterialApp
+/// with the appropriate theme and home page.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Shader Blur Demo'),
     );
   }
 }
 
+/// The main page of the application.
+///
+/// This stateful widget serves as the primary interface for the blur demonstration.
+/// It allows users to:
+/// - Toggle between single view and comparison view
+/// - Adjust blur radius using a slider
+/// - Toggle blur effect on/off in single view
+/// - Compare shader-based blur with ImageFilter blur side by side
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+  /// The title displayed in the app bar
   final String title;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+/// The state for the MyHomePage widget.
+///
+/// This class manages the state and UI for the blur demonstration.
 class _MyHomePageState extends State<MyHomePage> {
+  /// Counter for the demo content
   int _counter = 0;
+  
+  /// Current blur radius value (1.0 to 10.0)
   double _blurRadius = 5.0;
+  
+  /// Whether blur effect is enabled in single view mode
   bool _useBlur = true;
+  
+  /// Whether comparison view is active (showing both blur implementations side by side)
   bool _showComparison = false;
 
+  /// Increments the counter when the floating action button is pressed
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -70,7 +75,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Create the content widget that will be blurred
+    /// Creates the demo content that will be blurred
+    /// 
+    /// This includes text, colored containers, an image, and a progress indicator
+    /// to demonstrate how different UI elements appear when blurred.
     Widget buildContent() {
       return Center(
         child: Column(
@@ -121,10 +129,11 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
+    // Determine which view to show: comparison or single view
     Widget mainContent;
 
     if (_showComparison) {
-      // Comparison view
+      // Comparison view - shows shader blur and ImageFilter blur side by side
       mainContent = Column(
         children: [
           Padding(
@@ -201,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       );
     } else {
-      // Single view
+      // Single view - shows only one blur implementation (shader blur) or no blur
       Widget content = buildContent();
 
       // Apply blur if enabled
@@ -240,12 +249,13 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
+    // Build the main scaffold with app bar and controls
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
         actions: [
-          // Toggle for comparison view
+          // Toggle button for comparison view (side-by-side blur implementations)
           IconButton(
             icon: Icon(_showComparison ? Icons.compare : Icons.compare_arrows),
             tooltip: 'Toggle Comparison View',
@@ -259,7 +269,7 @@ class _MyHomePageState extends State<MyHomePage> {
               });
             },
           ),
-          // Toggle for blur effect (only in single view)
+          // Toggle switch for enabling/disabling blur effect (only available in single view mode)
           if (!_showComparison)
             Switch(
               value: _useBlur,
